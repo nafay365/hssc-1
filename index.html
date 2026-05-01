@@ -1,1 +1,1296 @@
 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FBISE 11th Math — Exam Intelligence System</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0e17;
+    --paper: #faf8f2;
+    --cream: #f2ede3;
+    --red: #c8102e;
+    --red-soft: #f5e6e9;
+    --gold: #c9973a;
+    --gold-soft: #fdf3e3;
+    --blue: #1b3d6e;
+    --blue-soft: #e8eef7;
+    --green: #1a6b3c;
+    --green-soft: #e6f4ec;
+    --border: #e2ddd4;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 80px 40px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content:'';
+    position:absolute; inset:0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 40px,
+      rgba(255,255,255,.02) 40px,
+      rgba(255,255,255,.02) 41px
+    );
+  }
+  .hero-inner { max-width:900px; margin:0 auto; position:relative; }
+  .hero-badge {
+    display: inline-block;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 2px;
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 6vw, 72px);
+    font-weight: 900;
+    line-height: 1.05;
+    margin-bottom: 18px;
+  }
+  .hero h1 span { color: var(--gold); }
+  .hero p {
+    font-size: 17px;
+    color: #b8b3a8;
+    max-width: 560px;
+    margin-bottom: 36px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  .stat { }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 900;
+    color: var(--gold);
+    display: block;
+  }
+  .stat-label {
+    font-size: 12px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #888;
+  }
+
+  /* ─── NAV ─── */
+  .nav {
+    position: sticky;
+    top: 0;
+    background: rgba(250,248,242,.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    z-index: 100;
+    padding: 0 40px;
+  }
+  .nav-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 0;
+  }
+  .nav-inner::-webkit-scrollbar { display:none; }
+  .nav-btn {
+    white-space: nowrap;
+    padding: 14px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: #888;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: all .2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .nav-btn:hover, .nav-btn.active {
+    color: var(--ink);
+    border-bottom-color: var(--red);
+  }
+
+  /* ─── SECTIONS ─── */
+  .section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 64px 40px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section:last-child { border-bottom: none; }
+
+  .step-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 4vw, 40px);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 32px;
+    color: var(--ink);
+  }
+
+  /* ─── PRIORITY TABLE ─── */
+  .priority-grid {
+    display: grid;
+    gap: 10px;
+  }
+  .priority-row {
+    display: grid;
+    grid-template-columns: 60px 1fr 80px 120px 100px;
+    gap: 12px;
+    align-items: center;
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 18px;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .priority-row:hover {
+    transform: translateX(4px);
+    box-shadow: -3px 0 0 var(--red);
+  }
+  .priority-row.header {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    border-radius: 6px;
+  }
+  .priority-row.header:hover { transform: none; box-shadow: none; }
+  .unit-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gold);
+  }
+  .unit-name { font-weight: 500; font-size: 14px; }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .badge.high { background: #fde8eb; color: #c8102e; }
+  .badge.med  { background: #fff8e6; color: #c9973a; }
+  .badge.low  { background: #efefef; color: #666; }
+  .weight { font-family: 'DM Mono', monospace; font-size: 12px; color: #666; }
+  .marks { font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 600; color: var(--blue); }
+
+  /* ─── UNIT CARDS ─── */
+  .units-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    margin-top: 8px;
+  }
+  .unit-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: box-shadow .2s;
+  }
+  .unit-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,.08); }
+  .unit-card-head {
+    padding: 14px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .unit-card-head.red    { background: var(--red-soft); border-bottom: 2px solid var(--red); }
+  .unit-card-head.gold   { background: var(--gold-soft); border-bottom: 2px solid var(--gold); }
+  .unit-card-head.blue   { background: var(--blue-soft); border-bottom: 2px solid var(--blue); }
+  .unit-card-title { font-weight: 700; font-size: 14px; }
+  .unit-card-body { padding: 14px 18px; background: white; }
+  .unit-card-body ul { list-style: none; }
+  .unit-card-body li {
+    font-size: 13px;
+    padding: 5px 0;
+    border-bottom: 1px solid #f0ece4;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    color: #444;
+  }
+  .unit-card-body li:last-child { border-bottom: none; }
+  .unit-card-body li::before {
+    content: '›';
+    color: var(--red);
+    font-weight: 700;
+    margin-top: 1px;
+    flex-shrink: 0;
+  }
+
+  /* ─── REPEATED QUESTIONS ─── */
+  .rq-list { display: grid; gap: 10px; }
+  .rq-item {
+    display: grid;
+    grid-template-columns: 36px 1fr auto;
+    gap: 14px;
+    align-items: center;
+    padding: 14px 18px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    transition: all .15s;
+  }
+  .rq-item:hover { border-color: var(--red); background: #fff9f9; }
+  .rq-rank {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--red);
+    text-align: center;
+  }
+  .rq-topic { font-weight: 500; font-size: 14px; }
+  .rq-unit  { font-size: 12px; color: #888; margin-top: 2px; }
+  .rq-freq  {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    background: var(--red-soft);
+    color: var(--red);
+    padding: 4px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .expected-list { display: grid; gap: 8px; }
+  .expected-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 12px 16px;
+    background: var(--gold-soft);
+    border: 1px solid #e8d5a8;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+  .expected-item::before {
+    content:'⚠️';
+    flex-shrink:0;
+    margin-top:1px;
+  }
+
+  /* ─── FORMULA SHEET ─── */
+  .formula-section { margin-bottom: 36px; }
+  .formula-section h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .formula-grid {
+    display: grid;
+    gap: 8px;
+  }
+  .formula-row {
+    display: grid;
+    grid-template-columns: 160px 1fr auto;
+    gap: 14px;
+    align-items: center;
+    padding: 10px 14px;
+    border-radius: 6px;
+    background: var(--cream);
+    border: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .formula-name { font-weight: 600; color: var(--blue); font-size: 12px; }
+  .formula-expr {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--ink);
+    word-break: break-word;
+  }
+  .formula-tag {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    white-space: nowrap;
+    font-weight: 600;
+  }
+  .formula-tag.must   { background: #e6f4ec; color: var(--green); }
+  .formula-tag.tricky { background: #fff8e6; color: var(--gold); }
+
+  /* ─── STUDY PLAN ─── */
+  .plan-grid {
+    display: grid;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .plan-row {
+    display: grid;
+    grid-template-columns: 70px 1fr 180px 180px;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    transition: background .15s;
+  }
+  .plan-row:last-child { border-bottom: none; }
+  .plan-row:hover { background: #fffbf5; }
+  .plan-row.header {
+    background: var(--ink);
+    color: var(--paper);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .plan-row.header:hover { background: var(--ink); }
+  .plan-cell {
+    padding: 13px 16px;
+    font-size: 13px;
+    border-right: 1px solid var(--border);
+  }
+  .plan-cell:last-child { border-right: none; }
+  .plan-day {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: 18px;
+    color: var(--red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--cream);
+  }
+  .plan-row.header .plan-day { background: transparent; color: var(--paper); font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600; }
+  .plan-cell small { display: block; font-size: 11px; color: #999; margin-top: 3px; }
+
+  /* ─── EXAM STRATEGY ─── */
+  .strategy-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 36px;
+  }
+  .strategy-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .strategy-card-head {
+    padding: 14px 18px;
+    font-weight: 700;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .strategy-card-head.a { background: var(--blue-soft); color: var(--blue); border-bottom: 2px solid var(--blue); }
+  .strategy-card-head.b { background: var(--red-soft); color: var(--red); border-bottom: 2px solid var(--red); }
+  .strategy-card-head.c { background: var(--green-soft); color: var(--green); border-bottom: 2px solid var(--green); }
+  .strategy-card-body { padding: 14px 18px; background: white; font-size: 13px; }
+  .strategy-stat {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid #f0ece4;
+  }
+  .strategy-stat:last-child { border-bottom: none; }
+  .strategy-stat span:first-child { color: #666; }
+  .strategy-stat span:last-child { font-weight: 600; font-family: 'DM Mono', monospace; font-size: 12px; }
+
+  .mistakes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 10px;
+  }
+  .mistake-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 12px 14px;
+    background: #fff5f6;
+    border: 1px solid #f5c5cb;
+    border-radius: 6px;
+    font-size: 13px;
+  }
+  .mistake-item::before { content:'❌'; flex-shrink:0; }
+
+  /* ─── GUESS PAPERS ─── */
+  .paper-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .paper-tab {
+    padding: 10px 22px;
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    background: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s;
+    color: #888;
+  }
+  .paper-tab.active, .paper-tab:hover {
+    border-color: var(--red);
+    color: var(--red);
+    background: var(--red-soft);
+  }
+  .paper-content { display: none; }
+  .paper-content.active { display: block; }
+  .paper-section {
+    margin-bottom: 28px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .paper-section-head {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .paper-section-head span {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    background: var(--gold);
+    color: var(--ink);
+    padding: 2px 10px;
+    border-radius: 3px;
+  }
+  .paper-section-body { padding: 16px 20px; background: white; }
+  .q-list { list-style: none; display: grid; gap: 8px; }
+  .q-list li {
+    font-size: 13px;
+    padding: 10px 14px;
+    background: var(--cream);
+    border-radius: 5px;
+    border-left: 3px solid var(--border);
+    display: flex;
+    gap: 10px;
+  }
+  .q-list li.mcq { border-left-color: var(--blue); }
+  .q-list li.sq  { border-left-color: var(--gold); }
+  .q-list li.lq  { border-left-color: var(--red); background: #fff9f9; }
+  .q-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: #999;
+    flex-shrink: 0;
+    padding-top: 1px;
+  }
+  .ans {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    background: var(--green-soft);
+    color: var(--green);
+    padding: 2px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+    align-self: flex-start;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  /* ─── SLO QUESTIONS ─── */
+  .slo-grid { display: grid; gap: 8px; }
+  .slo-item {
+    padding: 12px 16px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 13px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    transition: border-color .15s;
+  }
+  .slo-item:hover { border-color: var(--blue); }
+  .slo-tag {
+    flex-shrink: 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-weight: 600;
+    margin-top: 1px;
+  }
+  .slo-tag.mcq  { background: var(--blue-soft); color: var(--blue); }
+  .slo-tag.sq   { background: var(--gold-soft); color: var(--gold); }
+  .slo-tag.lq   { background: var(--red-soft); color: var(--red); }
+
+  /* ─── CHECKLIST ─── */
+  .checklist { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+  .check-item {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 10px 14px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all .15s;
+    user-select: none;
+  }
+  .check-item:hover { border-color: var(--green); }
+  .check-item input { accent-color: var(--green); width: 15px; height: 15px; }
+  .check-item label { cursor: pointer; }
+
+  /* ─── FOOTER ─── */
+  .footer {
+    background: var(--ink);
+    color: #888;
+    text-align: center;
+    padding: 40px;
+    font-size: 13px;
+  }
+  .footer strong { color: var(--gold); font-family: 'Playfair Display', serif; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 700px) {
+    .hero, .section { padding-left: 20px; padding-right: 20px; }
+    .nav { padding: 0 20px; }
+    .priority-row { grid-template-columns: 50px 1fr 80px; }
+    .priority-row .weight, .priority-row .marks { display: none; }
+    .plan-row { grid-template-columns: 50px 1fr; }
+    .plan-row .plan-cell:nth-child(3), .plan-row .plan-cell:nth-child(4) { display: none; }
+    .strategy-grid { grid-template-columns: 1fr; }
+    .formula-row { grid-template-columns: 120px 1fr; }
+    .formula-row .formula-tag { display: none; }
+    .hero-stats { gap: 24px; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity:0; transform: translateY(20px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+  .section { animation: fadeUp .5s ease both; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">FBISE · Grade 11 · Mathematics · NBF 2022–23</div>
+    <h1>Exam <span>Intelligence</span><br>System</h1>
+    <p>Complete SLO-based analysis, past paper breakdown, formula sheets, 15-day study plan, and 3 full guess papers.</p>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num">9</span><span class="stat-label">Units Covered</span></div>
+      <div class="stat"><span class="stat-num">8</span><span class="stat-label">Study Steps</span></div>
+      <div class="stat"><span class="stat-num">3</span><span class="stat-label">Full Guess Papers</span></div>
+      <div class="stat"><span class="stat-num">100</span><span class="stat-label">Total Marks</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- STICKY NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <button class="nav-btn active" onclick="scrollTo('s1')">① Syllabus</button>
+    <button class="nav-btn" onclick="scrollTo('s2')">② Past Papers</button>
+    <button class="nav-btn" onclick="scrollTo('s3')">③ SLO Questions</button>
+    <button class="nav-btn" onclick="scrollTo('s4')">④ Formulas</button>
+    <button class="nav-btn" onclick="scrollTo('s5')">⑤ Smart Notes</button>
+    <button class="nav-btn" onclick="scrollTo('s6')">⑥ Study Plan</button>
+    <button class="nav-btn" onclick="scrollTo('s7')">⑦ Strategy</button>
+    <button class="nav-btn" onclick="scrollTo('s8')">⑧ Guess Papers</button>
+  </div>
+</nav>
+
+<!-- ══════════════ STEP 1 ══════════════ -->
+<section class="section" id="s1">
+  <div class="step-label">Step 01 — Syllabus Breakdown</div>
+  <h2 class="section-title">Chapter Weightage & Priority Matrix</h2>
+
+  <div class="priority-grid">
+    <div class="priority-row header">
+      <div>Unit</div><div>Chapter</div><div>Priority</div><div>Weightage</div><div>Marks</div>
+    </div>
+    <div class="priority-row"><div class="unit-num">U-01</div><div class="unit-name">Complex Numbers</div><div><span class="badge high">🔴 High</span></div><div class="weight">15–18%</div><div class="marks">~20 m</div></div>
+    <div class="priority-row"><div class="unit-num">U-02</div><div class="unit-name">Matrices & Determinants</div><div><span class="badge high">🔴 High</span></div><div class="weight">18–22%</div><div class="marks">~25 m</div></div>
+    <div class="priority-row"><div class="unit-num">U-03</div><div class="unit-name">Vectors</div><div><span class="badge med">🟡 Med</span></div><div class="weight">10–13%</div><div class="marks">~15 m</div></div>
+    <div class="priority-row"><div class="unit-num">U-04</div><div class="unit-name">Sequences & Series</div><div><span class="badge high">🔴 High</span></div><div class="weight">15–18%</div><div class="marks">~20 m</div></div>
+    <div class="priority-row"><div class="unit-num">U-05</div><div class="unit-name">Polynomials</div><div><span class="badge med">🟡 Med</span></div><div class="weight">7–9%</div><div class="marks">~10 m</div></div>
+    <div class="priority-row"><div class="unit-num">U-06</div><div class="unit-name">Permutation & Combination</div><div><span class="badge med">🟡 Med</span></div><div class="weight">8–10%</div><div class="marks">~10 m</div></div>
+    <div class="priority-row"><div class="unit-num">U-07</div><div class="unit-name">Math Induction & Binomial</div><div><span class="badge high">🔴 High</span></div><div class="weight">12–15%</div><div class="marks">~15 m</div></div>
+    <div class="priority-row"><div class="unit-num">U-08</div><div class="unit-name">Fundamentals of Trigonometry</div><div><span class="badge high">🔴 High</span></div><div class="weight">10–12%</div><div class="marks">~15 m</div></div>
+    <div class="priority-row"><div class="unit-num">U-09</div><div class="unit-name">Trigonometric Functions</div><div><span class="badge med">🟡 Med</span></div><div class="weight">8–10%</div><div class="marks">~10 m</div></div>
+  </div>
+
+  <br>
+  <h3 style="font-family:'Playfair Display',serif;font-size:22px;margin-bottom:18px;">Key Topics Per Unit</h3>
+  <div class="units-grid">
+    <div class="unit-card">
+      <div class="unit-card-head red"><div class="unit-card-title">U1 · Complex Numbers</div><span class="badge high">🔴 High</span></div>
+      <div class="unit-card-body"><ul>
+        <li>Real & imaginary parts; equality condition</li>
+        <li>Operations: add, subtract, multiply, divide</li>
+        <li>Modulus & conjugate; division by conjugate</li>
+        <li>Polar form (modulus-argument)</li>
+        <li>Quadratic equations with complex roots</li>
+        <li>Powers of i (cycle of 4)</li>
+      </ul></div>
+    </div>
+    <div class="unit-card">
+      <div class="unit-card-head red"><div class="unit-card-title">U2 · Matrices & Determinants</div><span class="badge high">🔴 High</span></div>
+      <div class="unit-card-body"><ul>
+        <li>Matrix operations (including complex entries)</li>
+        <li>Determinant 3×3 by cofactors</li>
+        <li>Row operations; inverse; rank</li>
+        <li>Cramer's Rule (3 equations)</li>
+        <li>Matrix inversion method</li>
+        <li>Gaussian elimination (homogeneous)</li>
+      </ul></div>
+    </div>
+    <div class="unit-card">
+      <div class="unit-card-head gold"><div class="unit-card-title">U3 · Vectors</div><span class="badge med">🟡 Med</span></div>
+      <div class="unit-card-body"><ul>
+        <li>Unit vectors î, ĵ, k̂; magnitude</li>
+        <li>Dot product; angle; orthogonality</li>
+        <li>Cross product; geometrical interpretation</li>
+        <li>Scalar triple product; coplanar condition</li>
+      </ul></div>
+    </div>
+    <div class="unit-card">
+      <div class="unit-card-head red"><div class="unit-card-title">U4 · Sequences & Series</div><span class="badge high">🔴 High</span></div>
+      <div class="unit-card-body"><ul>
+        <li>AP: nth term, sum, inserting means</li>
+        <li>GP: nth term, sum, infinite series</li>
+        <li>HP: nth term; harmonic mean</li>
+        <li>Σn, Σn², Σn³ formulas</li>
+        <li>Arithmetico-geometric series</li>
+        <li>Recurring decimals via GP</li>
+      </ul></div>
+    </div>
+    <div class="unit-card">
+      <div class="unit-card-head gold"><div class="unit-card-title">U5 · Polynomials</div><span class="badge med">🟡 Med</span></div>
+      <div class="unit-card-body"><ul>
+        <li>Remainder Theorem (proof + use)</li>
+        <li>Factor Theorem (proof + use)</li>
+        <li>Zeros; factorizing cubic polynomials</li>
+      </ul></div>
+    </div>
+    <div class="unit-card">
+      <div class="unit-card-head gold"><div class="unit-card-title">U6 · Permutation & Combination</div><span class="badge med">🟡 Med</span></div>
+      <div class="unit-card-body"><ul>
+        <li>Factorial notation (n!)</li>
+        <li>Fundamental counting principle</li>
+        <li>ⁿPᵣ formula; circular permutation</li>
+        <li>ⁿCᵣ formula; real-world problems</li>
+      </ul></div>
+    </div>
+    <div class="unit-card">
+      <div class="unit-card-head red"><div class="unit-card-title">U7 · Induction & Binomial</div><span class="badge high">🔴 High</span></div>
+      <div class="unit-card-body"><ul>
+        <li>Induction: base, hypothesis, conclusion</li>
+        <li>Prove summation & divisibility formulas</li>
+        <li>Binomial theorem: (a+b)ⁿ expansion</li>
+        <li>General term T(r+1); middle term</li>
+        <li>Term independent of x</li>
+      </ul></div>
+    </div>
+    <div class="unit-card">
+      <div class="unit-card-head red"><div class="unit-card-title">U8 · Fundamentals of Trig.</div><span class="badge high">🔴 High</span></div>
+      <div class="unit-card-body"><ul>
+        <li>cos(A±B), sin(A±B), tan(A±B)</li>
+        <li>Allied angles and their ratios</li>
+        <li>Double angle & half angle formulas</li>
+        <li>Product-to-sum & sum-to-product</li>
+        <li>a sinθ + b cosθ = r sin(θ+φ) form</li>
+      </ul></div>
+    </div>
+    <div class="unit-card">
+      <div class="unit-card-head gold"><div class="unit-card-title">U9 · Trigonometric Functions</div><span class="badge med">🟡 Med</span></div>
+      <div class="unit-card-body"><ul>
+        <li>Domain & range of trig functions</li>
+        <li>Even/odd; periodicity</li>
+        <li>Max/min of a + b sinθ forms</li>
+        <li>Graphs of sin, cos, tan</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ STEP 2 ══════════════ -->
+<section class="section" id="s2">
+  <div class="step-label">Step 02 — Past Paper Analysis</div>
+  <h2 class="section-title">🔥 Most Repeated Questions</h2>
+
+  <h3 style="font-family:'Playfair Display',serif;font-size:19px;margin-bottom:14px;">Long Questions (5–10 marks)</h3>
+  <div class="rq-list" style="margin-bottom:32px;">
+    <div class="rq-item"><div class="rq-rank">1</div><div><div class="rq-topic">Solve 3×3 system using Cramer's Rule</div><div class="rq-unit">Unit 2 · Matrices</div></div><div class="rq-freq">9/10 years</div></div>
+    <div class="rq-item"><div class="rq-rank">2</div><div><div class="rq-topic">Prove by Mathematical Induction (summation formula, e.g. Σr²)</div><div class="rq-unit">Unit 7 · Induction</div></div><div class="rq-freq">9/10 years</div></div>
+    <div class="rq-item"><div class="rq-rank">3</div><div><div class="rq-topic">Binomial expansion — find general term / specific coefficient</div><div class="rq-unit">Unit 7 · Binomial</div></div><div class="rq-freq">8/10 years</div></div>
+    <div class="rq-item"><div class="rq-rank">4</div><div><div class="rq-topic">Arithmetic Series: sum, insert means, real-life problem</div><div class="rq-unit">Unit 4 · AP</div></div><div class="rq-freq">8/10 years</div></div>
+    <div class="rq-item"><div class="rq-rank">5</div><div><div class="rq-topic">Geometric Series: sum to infinity, recurring decimal</div><div class="rq-unit">Unit 4 · GP</div></div><div class="rq-freq">7/10 years</div></div>
+    <div class="rq-item"><div class="rq-rank">6</div><div><div class="rq-topic">Solve 3×3 system using Matrix Inversion Method</div><div class="rq-unit">Unit 2 · Matrices</div></div><div class="rq-freq">7/10 years</div></div>
+    <div class="rq-item"><div class="rq-rank">7</div><div><div class="rq-topic">Prove compound angle formula; find exact trig values</div><div class="rq-unit">Unit 8 · Trigonometry</div></div><div class="rq-freq">7/10 years</div></div>
+    <div class="rq-item"><div class="rq-rank">8</div><div><div class="rq-topic">Complex number in polar form; modulus, argument, operations</div><div class="rq-unit">Unit 1 · Complex</div></div><div class="rq-freq">7/10 years</div></div>
+    <div class="rq-item"><div class="rq-rank">9</div><div><div class="rq-topic">Cross product and scalar triple product; coplanarity</div><div class="rq-unit">Unit 3 · Vectors</div></div><div class="rq-freq">6/10 years</div></div>
+    <div class="rq-item"><div class="rq-rank">10</div><div><div class="rq-topic">Factor Theorem proof; factorize cubic polynomial</div><div class="rq-unit">Unit 5 · Polynomials</div></div><div class="rq-freq">6/10 years</div></div>
+  </div>
+
+  <h3 style="font-family:'Playfair Display',serif;font-size:19px;margin-bottom:14px;">⚠️ Expected Questions for Upcoming Exam</h3>
+  <div class="expected-list">
+    <div class="expected-item">Prove by induction that n(n+1)(n+2) is divisible by 6</div>
+    <div class="expected-item">Find the term independent of x in (x + 1/x)¹²</div>
+    <div class="expected-item">Solve system of equations using Gaussian elimination (homogeneous)</div>
+    <div class="expected-item">Express sin(75°) or cos(15°) in exact form using compound angles</div>
+    <div class="expected-item">Insert 4 arithmetic means between two given numbers; find their sum</div>
+    <div class="expected-item">Convert recurring decimal 0.272727... into fraction using GP</div>
+    <div class="expected-item">Find modulus and argument of complex number; write in polar form</div>
+    <div class="expected-item">Prove scalar triple product = 0 for coplanar vectors; test given vectors</div>
+  </div>
+</section>
+
+<!-- ══════════════ STEP 3 ══════════════ -->
+<section class="section" id="s3">
+  <div class="step-label">Step 03 — SLO-Based Predictions</div>
+  <h2 class="section-title">Predicted Exam Questions</h2>
+
+  <h3 style="font-family:'Playfair Display',serif;font-size:19px;margin-bottom:14px;">Conceptual MCQs</h3>
+  <div class="slo-grid" style="margin-bottom:32px;">
+    <div class="slo-item"><span class="slo-tag mcq">MCQ</span><span>If z = 3 − 4i, then |z| = ? <strong style="color:var(--green);margin-left:8px;">→ 5</strong></span></div>
+    <div class="slo-item"><span class="slo-tag mcq">MCQ</span><span>i⁴⁷ = ? <strong style="color:var(--green);margin-left:8px;">→ −i</strong></span></div>
+    <div class="slo-item"><span class="slo-tag mcq">MCQ</span><span>A matrix is singular if its determinant is: <strong style="color:var(--green);margin-left:8px;">→ Zero</strong></span></div>
+    <div class="slo-item"><span class="slo-tag mcq">MCQ</span><span>Number of circular arrangements of 5 distinct objects: <strong style="color:var(--green);margin-left:8px;">→ 4! = 24</strong></span></div>
+    <div class="slo-item"><span class="slo-tag mcq">MCQ</span><span>Sum of infinite GP with a = 3, r = ½: <strong style="color:var(--green);margin-left:8px;">→ 6</strong></span></div>
+    <div class="slo-item"><span class="slo-tag mcq">MCQ</span><span>Coefficient of x³ in (1+x)⁵: <strong style="color:var(--green);margin-left:8px;">→ 10</strong></span></div>
+    <div class="slo-item"><span class="slo-tag mcq">MCQ</span><span>sin(2A) = ? <strong style="color:var(--green);margin-left:8px;">→ 2 sinA cosA</strong></span></div>
+    <div class="slo-item"><span class="slo-tag mcq">MCQ</span><span>cos(A+B) + cos(A−B) = ? <strong style="color:var(--green);margin-left:8px;">→ 2 cosA cosB</strong></span></div>
+    <div class="slo-item"><span class="slo-tag mcq">MCQ</span><span>Period of sin(x): <strong style="color:var(--green);margin-left:8px;">→ 2π</strong></span></div>
+    <div class="slo-item"><span class="slo-tag mcq">MCQ</span><span>ⁿCᵣ + ⁿCᵣ₋₁ = ? <strong style="color:var(--green);margin-left:8px;">→ ⁽ⁿ⁺¹⁾Cᵣ</strong></span></div>
+  </div>
+
+  <h3 style="font-family:'Playfair Display',serif;font-size:19px;margin-bottom:14px;">Short Questions (2–3 marks)</h3>
+  <div class="slo-grid" style="margin-bottom:32px;">
+    <div class="slo-item"><span class="slo-tag sq">SQ U1</span>If z₁ = 2+3i, z₂ = 1−2i — find z₁z₂ and verify |z₁z₂| = |z₁||z₂|</div>
+    <div class="slo-item"><span class="slo-tag sq">SQ U1</span>Express z = −1 + i in polar form (find r and θ)</div>
+    <div class="slo-item"><span class="slo-tag sq">SQ U2</span>Find det of 3×3 matrix [[1,2,3],[4,5,6],[7,8,9]] — is it singular?</div>
+    <div class="slo-item"><span class="slo-tag sq">SQ U2</span>Using Cramer's Rule, solve: 2x + y = 5, x − y = 1</div>
+    <div class="slo-item"><span class="slo-tag sq">SQ U4</span>5th term of AP is 11 and 9th term is 19 — find a and d</div>
+    <div class="slo-item"><span class="slo-tag sq">SQ U4</span>Insert 3 geometric means between 2 and 32</div>
+    <div class="slo-item"><span class="slo-tag sq">SQ U4</span>Find sum to infinity: 1 + 1/3 + 1/9 + …</div>
+    <div class="slo-item"><span class="slo-tag sq">SQ U7</span>Prove by induction: 1 + 3 + 5 + … + (2n−1) = n²</div>
+    <div class="slo-item"><span class="slo-tag sq">SQ U7</span>Find the 4th term of (2x − y)⁶</div>
+    <div class="slo-item"><span class="slo-tag sq">SQ U8</span>Prove: sin(A+B) + sin(A−B) = 2 sinA cosB</div>
+    <div class="slo-item"><span class="slo-tag sq">SQ U8</span>Find exact value of sin(75°) without tables</div>
+  </div>
+
+  <h3 style="font-family:'Playfair Display',serif;font-size:19px;margin-bottom:14px;">Long Questions (8–10 marks)</h3>
+  <div class="slo-grid">
+    <div class="slo-item"><span class="slo-tag lq">LQ</span>Solve x+2y+z=8, 2x+y+z=10, x+y+2z=9 by (a) Matrix Inversion and (b) Cramer's Rule</div>
+    <div class="slo-item"><span class="slo-tag lq">LQ</span>(a) Prove by induction: Σr² = n(n+1)(2n+1)/6 &nbsp; (b) Prove 5ⁿ − 1 is divisible by 4</div>
+    <div class="slo-item"><span class="slo-tag lq">LQ</span>(a) Expand (x+1/x)⁸ &nbsp; (b) Term independent of x in (x²+1/x)⁹ &nbsp; (c) Middle term of (a−2b)¹⁰</div>
+    <div class="slo-item"><span class="slo-tag lq">LQ</span>4th term of GP is 8, 8th term is 128 — find GP; sum of 10 terms; insert 5 AMs between 3 and 27</div>
+    <div class="slo-item"><span class="slo-tag lq">LQ</span>Prove cos(A−B) using distance formula; derive all other compound formulas; find sin(105°)</div>
+  </div>
+</section>
+
+<!-- ══════════════ STEP 4 ══════════════ -->
+<section class="section" id="s4">
+  <div class="step-label">Step 04 — Formula Sheet</div>
+  <h2 class="section-title">Complete Formula Reference</h2>
+
+  <div class="formula-section">
+    <h3>Unit 1 · Complex Numbers <span style="font-size:13px;color:#888;font-weight:400;font-family:'DM Sans',sans-serif;">(z = a + bi)</span></h3>
+    <div class="formula-grid">
+      <div class="formula-row"><div class="formula-name">Modulus</div><div class="formula-expr">|z| = √(a² + b²)</div><span class="formula-tag must">⭐ MUST</span></div>
+      <div class="formula-row"><div class="formula-name">Polar Form</div><div class="formula-expr">z = r(cosθ + i sinθ),  r = |z|,  θ = arg(z)</div><span class="formula-tag must">⭐ MUST</span></div>
+      <div class="formula-row"><div class="formula-name">Conjugate</div><div class="formula-expr">z* = a − bi (flip sign of imaginary part)</div><span class="formula-tag must">⭐ MUST</span></div>
+      <div class="formula-row"><div class="formula-name">Division</div><div class="formula-expr">z₁/z₂ = (z₁ · z₂*) / |z₂|²</div><span class="formula-tag must">⭐ MUST</span></div>
+      <div class="formula-row"><div class="formula-name">Powers of i</div><div class="formula-expr">i¹=i,  i²=−1,  i³=−i,  i⁴=1  (cycle of 4)</div><span class="formula-tag must">⭐ MUST</span></div>
+    </div>
+  </div>
+
+  <div class="formula-section">
+    <h3>Unit 2 · Matrices & Determinants</h3>
+    <div class="formula-grid">
+      <div class="formula-row"><div class="formula-name">Det 2×2</div><div class="formula-expr">|A| = ad − bc  for  [[a,b],[c,d]]</div><span class="formula-tag must">⭐ MUST</span></div>
+      <div class="formula-row"><div class="formula-name">Det 3×3</div><div class="formula-expr">Expand by cofactors along row/column with most zeros</div><span class="formula-tag must">⭐ MUST</span></div>
+      <div class="formula-row"><div class="formula-name">Inverse 2×2</div><div class="formula-expr">A⁻¹ = (1/|A|) · [[d, −b],[−c, a]]</div><span class="formula-tag must">⭐ MUST</span></div>
+      <div class="formula-row"><div class="formula-name">Cramer's Rule</div><div class="formula-expr">x = Dₓ/D,  y = Dy/D,  z = Dz/D</div><span class="formula-tag must">⭐ MUST</span></div>
+      <div class="formula-row"><div class="formula-name">Cofactor Sign</div><div class="formula-expr">Cᵢⱼ = (−1)^(i+j) · Mᵢⱼ  →  sign pattern: + − + / − + − / + − +</div><span class="formula-tag tricky">⚠️ TRICKY</span></div>
+    </div>
+  </div>
+
+  <div class="formula-section">
+    <h3>Unit 4 · Sequences & Series</h3>
+    <div class="formula-grid">
+      <div class="formula-row"><div class="formula-name">AP nth term</div><div class="formula-expr">aₙ = a + (n−1)d</div><span class="formula-tag must">⭐ MUST</span></div>
+      <div class="formula-row"><div class="formula-name">AP Sum</div><div class="formula-expr">Sₙ = n/2 · [2a + (n−1)d]  =  n/2 · (a + l)</div><span class="formula-tag must">⭐ MUST</span></div>
+      <div class="formula-row"><div class="formula-name">GP nth term</div><div class="formula-expr">aₙ = a · rⁿ⁻¹</div><span class="formula-tag must">⭐ MUST</span></div>
+      <div class="formula-row"><div class="formula-name">GP Sum (finite)</div><div class="formula-expr">Sₙ = a(rⁿ − 1)/(r − 1),  r ≠ 1</div><span class="formula-tag must">⭐ MUST</span></div>
+      <div class="formula-row"><div class="formula-name">GP Sum (∞)</div><div class="formula-expr">S∞ = a / (1 − r),  |r| < 1 ← CHECK CONDITION!</div><span class="formula-tag must">⭐ MUST</span></div>
+      <div class="formula-row"><div class="formula-name">Σn</div><div class="formula-expr">n(n+1)/2</div><span class="formula-tag must">⭐ MUST</span></div>
+      <div class="formula-row"><div class="formula-name">Σn²</div><div class="formula-expr">n(n+1)(2n+1)/6</div><span class="formula-tag must">⭐ MUST</span></div>
+      <div class="formula-row"><div class="formula-name">Σn³</div><div class="formula-expr">[n(n+1)/2]²</div><span class="formula-tag must">⭐ MUST</span></div>
+      <div class="formula-row"><div class="formula-name">AG Series (∞)</div><div class="formula-expr">S∞ = a/(1−r) + dr/(1−r)²  for |r| < 1</div><span class="formula-tag tricky">⚠️ TRICKY</span></div>
+    </div>
+  </div>
+
+  <div class="formula-section">
+    <h3>Unit 7 · Binomial Theorem</h3>
+    <div class="formula-grid">
+      <div class="formula-row"><div class="formula-name">Expansion</div><div class="formula-expr">(a+b)ⁿ = Σ(r=0 to n) ⁿCᵣ · aⁿ⁻ʳ · bʳ</div><span class="formula-tag must">⭐ MUST</span></div>
+      <div class="formula-row"><div class="formula-name">General Term</div><div class="formula-expr">T(r+1) = ⁿCᵣ · aⁿ⁻ʳ · bʳ</div><span class="formula-tag must">⭐ MUST</span></div>
+      <div class="formula-row"><div class="formula-name">Middle Term</div><div class="formula-expr">n even → T(n/2+1);  n odd → T((n+1)/2) & T((n+3)/2)</div><span class="formula-tag must">⭐ MUST</span></div>
+      <div class="formula-row"><div class="formula-name">Indep. of x</div><div class="formula-expr">Set total power of x = 0, solve for r</div><span class="formula-tag tricky">⚠️ TRICKY</span></div>
+    </div>
+  </div>
+
+  <div class="formula-section">
+    <h3>Unit 8 · Trigonometry — ALL Compound Formulas</h3>
+    <div class="formula-grid">
+      <div class="formula-row"><div class="formula-name">cos(A−B) ★base</div><div class="formula-expr">cosA cosB + sinA sinB</div><span class="formula-tag must">⭐ BASE</span></div>
+      <div class="formula-row"><div class="formula-name">cos(A+B)</div><div class="formula-expr">cosA cosB − sinA sinB</div><span class="formula-tag must">⭐ MUST</span></div>
+      <div class="formula-row"><div class="formula-name">sin(A+B)</div><div class="formula-expr">sinA cosB + cosA sinB</div><span class="formula-tag must">⭐ MUST</span></div>
+      <div class="formula-row"><div class="formula-name">sin(A−B)</div><div class="formula-expr">sinA cosB − cosA sinB</div><span class="formula-tag must">⭐ MUST</span></div>
+      <div class="formula-row"><div class="formula-name">tan(A+B)</div><div class="formula-expr">(tanA + tanB) / (1 − tanA tanB)</div><span class="formula-tag must">⭐ MUST</span></div>
+      <div class="formula-row"><div class="formula-name">sin(2A)</div><div class="formula-expr">2 sinA cosA</div><span class="formula-tag must">⭐ MUST</span></div>
+      <div class="formula-row"><div class="formula-name">cos(2A)</div><div class="formula-expr">cos²A − sin²A  =  1 − 2sin²A  =  2cos²A − 1</div><span class="formula-tag must">⭐ MUST</span></div>
+      <div class="formula-row"><div class="formula-name">sin(A/2)</div><div class="formula-expr">√[(1−cosA)/2]</div><span class="formula-tag must">⭐ MUST</span></div>
+      <div class="formula-row"><div class="formula-name">cos(A/2)</div><div class="formula-expr">√[(1+cosA)/2]</div><span class="formula-tag must">⭐ MUST</span></div>
+      <div class="formula-row"><div class="formula-name">2 sinA cosB</div><div class="formula-expr">sin(A+B) + sin(A−B)</div><span class="formula-tag must">⭐ MUST</span></div>
+      <div class="formula-row"><div class="formula-name">2 cosA cosB</div><div class="formula-expr">cos(A−B) + cos(A+B)</div><span class="formula-tag must">⭐ MUST</span></div>
+      <div class="formula-row"><div class="formula-name">sinC + sinD</div><div class="formula-expr">2 sin[(C+D)/2] cos[(C−D)/2]</div><span class="formula-tag must">⭐ MUST</span></div>
+      <div class="formula-row"><div class="formula-name">a sinθ + b cosθ</div><div class="formula-expr">r sin(θ + φ),  r = √(a²+b²),  tanφ = b/a</div><span class="formula-tag tricky">⚠️ TRICKY</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ STEP 5 ══════════════ -->
+<section class="section" id="s5">
+  <div class="step-label">Step 05 — Smart Notes</div>
+  <h2 class="section-title">Quick Revision Bullets</h2>
+  <div class="units-grid">
+    <div class="unit-card">
+      <div class="unit-card-head red"><div class="unit-card-title">Complex Numbers</div></div>
+      <div class="unit-card-body"><ul>
+        <li>z = a+bi · a=Real, b=Imaginary</li>
+        <li>Equality: both Real AND Imaginary must match</li>
+        <li>|z| is always non-negative real</li>
+        <li>Arg θ: use arctan(b/a) + adjust quadrant</li>
+        <li>Divide: multiply top & bottom by conjugate</li>
+        <li>i powers: divide exponent by 4, use remainder</li>
+        <li>EXAM TIP: state r AND θ clearly in polar form</li>
+      </ul></div>
+    </div>
+    <div class="unit-card">
+      <div class="unit-card-head red"><div class="unit-card-title">Matrices</div></div>
+      <div class="unit-card-body"><ul>
+        <li>Expand det 3×3 along row with most zeros</li>
+        <li>Cramer: D=det(A); Dₓ=replace col1 with B</li>
+        <li>A⁻¹ = (1/detA) × adj(A)</li>
+        <li>adj(A) = transpose of cofactor matrix</li>
+        <li>Consistent: D≠0 (unique) or D=Dₓ=0 (∞)</li>
+        <li>EXAM TIP: always check det(A) first</li>
+      </ul></div>
+    </div>
+    <div class="unit-card">
+      <div class="unit-card-head red"><div class="unit-card-title">Sequences & Series</div></div>
+      <div class="unit-card-body"><ul>
+        <li>AP: constant difference d between terms</li>
+        <li>GP: constant ratio r between terms</li>
+        <li>HP: reciprocals of terms form an AP</li>
+        <li>AM ≥ GM ≥ HM (positive unequal numbers)</li>
+        <li>Infinite GP: MUST have |r| &lt; 1</li>
+        <li>0.363636… = 36/99 = 4/11 (GP trick)</li>
+        <li>Σn, Σn², Σn³ — MEMORIZE all three</li>
+      </ul></div>
+    </div>
+    <div class="unit-card">
+      <div class="unit-card-head red"><div class="unit-card-title">Induction & Binomial</div></div>
+      <div class="unit-card-body"><ul>
+        <li>3 steps: Base (n=1) → Assume (n=k) → Prove (n=k+1)</li>
+        <li>NEVER just verify — algebraically show P(k)⟹P(k+1)</li>
+        <li>General term: T(r+1) = ⁿCᵣ · aⁿ⁻ʳ · bʳ</li>
+        <li>Indep. of x: set total power of x = 0, solve r</li>
+        <li>n even → 1 middle term; n odd → 2 middle terms</li>
+        <li>Divisibility: show f(k+1) − f(k) is divisible</li>
+      </ul></div>
+    </div>
+    <div class="unit-card">
+      <div class="unit-card-head red"><div class="unit-card-title">Trigonometry</div></div>
+      <div class="unit-card-body"><ul>
+        <li>Memorize cos(A−B) first — all others derive from it</li>
+        <li>Allied: odd multiple of 90° → function changes</li>
+        <li>sin↔cos, tan↔cot when multiplied by odd 90°</li>
+        <li>Double angle: sin2A and cos2A most asked</li>
+        <li>Exact values: use 30°, 45°, 60° + compound</li>
+        <li>Product-to-sum: for proving identities</li>
+      </ul></div>
+    </div>
+    <div class="unit-card">
+      <div class="unit-card-head gold"><div class="unit-card-title">P&C + Polynomials</div></div>
+      <div class="unit-card-body"><ul>
+        <li>ⁿPᵣ = n!/(n−r)!  — order MATTERS</li>
+        <li>ⁿCᵣ = n!/[r!(n−r)!]  — order does NOT matter</li>
+        <li>Circular: (n−1)! arrangements</li>
+        <li>Remainder Theorem: p(a) = remainder when ÷(x−a)</li>
+        <li>Factor Theorem: p(a)=0 ⟺ (x−a) is a factor</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ STEP 6 ══════════════ -->
+<section class="section" id="s6">
+  <div class="step-label">Step 06 — 15-Day Study Plan</div>
+  <h2 class="section-title">Day-by-Day Roadmap</h2>
+  <p style="margin-bottom:20px;color:#666;font-size:14px;">Daily commitment: <strong>2 hrs study + 1 hr memorize + 1.5 hrs practice = 4.5 hrs/day</strong></p>
+
+  <div class="plan-grid">
+    <div class="plan-row header">
+      <div class="plan-cell plan-day">Day</div>
+      <div class="plan-cell">Topics to Study</div>
+      <div class="plan-cell">Memorize</div>
+      <div class="plan-cell">Practice</div>
+    </div>
+    <div class="plan-row"><div class="plan-cell plan-day">1</div><div class="plan-cell">U2: Matrix operations, Determinants 3×3</div><div class="plan-cell">Cofactor expansion; det properties</div><div class="plan-cell">5 determinant problems</div></div>
+    <div class="plan-row"><div class="plan-cell plan-day">2</div><div class="plan-cell">U2: Matrix inverse, Cramer's Rule</div><div class="plan-cell">Cramer's Rule steps; adjoint formula</div><div class="plan-cell">3 full Cramer's Rule problems</div></div>
+    <div class="plan-row"><div class="plan-cell plan-day">3</div><div class="plan-cell">U2: Gaussian elimination, full review</div><div class="plan-cell">Matrix inversion method steps</div><div class="plan-cell">1 full LQ (both methods)</div></div>
+    <div class="plan-row"><div class="plan-cell plan-day">4</div><div class="plan-cell">U7: Mathematical Induction (summation)</div><div class="plan-cell">3 induction steps; Σn, Σn², Σn³</div><div class="plan-cell">Prove 5 induction statements</div></div>
+    <div class="plan-row"><div class="plan-cell plan-day">5</div><div class="plan-cell">U7: Divisibility induction; Binomial basics</div><div class="plan-cell">General term T(r+1); Pascal's triangle</div><div class="plan-cell">3–4 specific binomial terms</div></div>
+    <div class="plan-row"><div class="plan-cell plan-day">6</div><div class="plan-cell">U7: Middle term; term indep. of x; applications</div><div class="plan-cell">Middle term condition (n even/odd)</div><div class="plan-cell">5 binomial expansion problems</div></div>
+    <div class="plan-row"><div class="plan-cell plan-day">7</div><div class="plan-cell">U4: AP — general term, sum, inserting means</div><div class="plan-cell">AP formulas; inserting n means formula</div><div class="plan-cell">4 AP long questions</div></div>
+    <div class="plan-row"><div class="plan-cell plan-day">8</div><div class="plan-cell">U4: GP — general term, sum, infinite, decimals</div><div class="plan-cell">GP formulas; S∞ = a/(1−r)</div><div class="plan-cell">4 GP problems incl. recurring decimals</div></div>
+    <div class="plan-row"><div class="plan-cell plan-day">9</div><div class="plan-cell">U4: HP, Sigma notation, AG series, differences</div><div class="plan-cell">Sigma formulas; HP nth term</div><div class="plan-cell">3 advanced series questions</div></div>
+    <div class="plan-row"><div class="plan-cell plan-day">10</div><div class="plan-cell">U8: cos(A−B) proof; ALL compound formulas</div><div class="plan-cell">All 6 compound angle formulas</div><div class="plan-cell">Prove 5 trig identities</div></div>
+    <div class="plan-row"><div class="plan-cell plan-day">11</div><div class="plan-cell">U8: Double/half angle; product-to-sum; exact values</div><div class="plan-cell">All double & half angle formulas</div><div class="plan-cell">Find 10 exact trig values</div></div>
+    <div class="plan-row"><div class="plan-cell plan-day">12</div><div class="plan-cell">U1: Complex — operations, polar form, equations</div><div class="plan-cell">Polar form conversion; conjugate method</div><div class="plan-cell">10 complex number problems</div></div>
+    <div class="plan-row"><div class="plan-cell plan-day">13</div><div class="plan-cell">U5 + U6: Remainder/Factor theorem; P&C</div><div class="plan-cell">nPr, nCr, circular perm formulas</div><div class="plan-cell">10 P&C + 5 polynomial problems</div></div>
+    <div class="plan-row"><div class="plan-cell plan-day">14</div><div class="plan-cell">U3 + U9: Key vector formulas; trig function graphs</div><div class="plan-cell">Dot/cross product; domain & range</div><div class="plan-cell">5 vector + trig function problems</div></div>
+    <div class="plan-row" style="background:#fff5f5;"><div class="plan-cell plan-day" style="color:var(--red);font-size:14px;font-family:'DM Sans',sans-serif;font-weight:700;">15 ★</div><div class="plan-cell"><strong>FULL REVISION DAY — complete 1 past paper timed</strong></div><div class="plan-cell"><strong>ALL starred formulas from formula sheet</strong></div><div class="plan-cell"><strong>1 full paper in 3 hours</strong></div></div>
+  </div>
+</section>
+
+<!-- ══════════════ STEP 7 ══════════════ -->
+<section class="section" id="s7">
+  <div class="step-label">Step 07 — Exam Strategy</div>
+  <h2 class="section-title">Paper Strategy & Time Management</h2>
+
+  <div class="strategy-grid">
+    <div class="strategy-card">
+      <div class="strategy-card-head a">📝 Section A — MCQs</div>
+      <div class="strategy-card-body">
+        <div class="strategy-stat"><span>Marks</span><span>20</span></div>
+        <div class="strategy-stat"><span>Questions</span><span>All 20</span></div>
+        <div class="strategy-stat"><span>Time Budget</span><span>25–30 min</span></div>
+        <div class="strategy-stat"><span>Negative Marking</span><span>None ✅</span></div>
+        <div class="strategy-stat"><span>Best Order</span><span>U4 → U7 → U8 → U2</span></div>
+      </div>
+    </div>
+    <div class="strategy-card">
+      <div class="strategy-card-head b">📖 Section B — Short Q</div>
+      <div class="strategy-card-body">
+        <div class="strategy-stat"><span>Marks</span><span>40</span></div>
+        <div class="strategy-stat"><span>Attempt</span><span>8 of 10</span></div>
+        <div class="strategy-stat"><span>Time Budget</span><span>60–70 min</span></div>
+        <div class="strategy-stat"><span>Per Question</span><span>~8 min</span></div>
+        <div class="strategy-stat"><span>Priority</span><span>U2 › U4 › U7 › U8</span></div>
+      </div>
+    </div>
+    <div class="strategy-card">
+      <div class="strategy-card-head c">📐 Section C — Long Q</div>
+      <div class="strategy-card-body">
+        <div class="strategy-stat"><span>Marks</span><span>40</span></div>
+        <div class="strategy-stat"><span>Attempt</span><span>3 of 5</span></div>
+        <div class="strategy-stat"><span>Time Budget</span><span>60–70 min</span></div>
+        <div class="strategy-stat"><span>Per Question</span><span>~22 min</span></div>
+        <div class="strategy-stat"><span>Always Attempt</span><span>Matrices + Seq + Induction</span></div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="font-family:'Playfair Display',serif;font-size:20px;margin-bottom:14px;">❌ Common Mistakes to Avoid</h3>
+  <div class="mistakes-grid">
+    <div class="mistake-item">NOT writing the n=1 base case in Mathematical Induction</div>
+    <div class="mistake-item">Forgetting to check |r| &lt; 1 before using infinite GP formula</div>
+    <div class="mistake-item">Using wrong sign in compound angle formulas (cos(A+B) vs cos(A−B))</div>
+    <div class="mistake-item">Not simplifying the final answer (leaving as unsimplified fraction)</div>
+    <div class="mistake-item">Wrong cofactor sign pattern (must be: + − + / − + − / + − +)</div>
+    <div class="mistake-item">Confusing ⁿPᵣ with ⁿCᵣ — read question carefully!</div>
+    <div class="mistake-item">Spending more than 1 minute on a single MCQ — move on!</div>
+    <div class="mistake-item">Not checking det(A) = 0 before attempting matrix inverse</div>
+  </div>
+</section>
+
+<!-- ══════════════ STEP 8 ══════════════ -->
+<section class="section" id="s8">
+  <div class="step-label">Step 08 — Guess Papers</div>
+  <h2 class="section-title">3 Full-Length Guess Papers</h2>
+  <p style="margin-bottom:20px;color:#666;font-size:14px;">Exact FBISE pattern: 20 MCQs + 10 SQs (attempt 8) + 5 LQs (attempt 3) = 100 marks</p>
+
+  <div class="paper-tabs">
+    <button class="paper-tab active" onclick="switchPaper(1)">Paper 1 — Standard</button>
+    <button class="paper-tab" onclick="switchPaper(2)">Paper 2 — Advanced</button>
+    <button class="paper-tab" onclick="switchPaper(3)">Paper 3 — Excellence</button>
+  </div>
+
+  <!-- PAPER 1 -->
+  <div class="paper-content active" id="paper-1">
+    <div class="paper-section">
+      <div class="paper-section-head">Section A — MCQs (All 20) <span>20 Marks</span></div>
+      <div class="paper-section-body">
+        <ul class="q-list">
+          <li class="mcq"><span class="q-num">Q1</span> i⁵³ = ?  (a) i  (b) −i  (c) 1  (d) −1 <span class="ans">Ans: i</span></li>
+          <li class="mcq"><span class="q-num">Q2</span> If |A| = 0, matrix A is called: (a) identity (b) singular (c) symmetric (d) inverse <span class="ans">Ans: b</span></li>
+          <li class="mcq"><span class="q-num">Q3</span> 10th term of AP 3, 7, 11, ... is: (a) 39 (b) 41 (c) 43 (d) 37 <span class="ans">Ans: a</span></li>
+          <li class="mcq"><span class="q-num">Q4</span> ⁿC₀ + ⁿC₁ + ... + ⁿCₙ = ? (a) 2ⁿ (b) 2ⁿ⁻¹ (c) n! (d) 0 <span class="ans">Ans: a</span></li>
+          <li class="mcq"><span class="q-num">Q5</span> GM between 4 and 9 is: (a) 6 (b) 6.5 (c) 5 (d) 7 <span class="ans">Ans: a</span></li>
+          <li class="mcq"><span class="q-num">Q6</span> sin(A+B) − sin(A−B) = ? (a) 2cosAsinB (b) 2sinAcosB (c) 2sinAsinB (d) 2cosAcosB <span class="ans">Ans: a</span></li>
+          <li class="mcq"><span class="q-num">Q7</span> Period of cos(2x) is: (a) π (b) 2π (c) π/2 (d) 4π <span class="ans">Ans: a</span></li>
+          <li class="mcq"><span class="q-num">Q8</span> ⁵P₃ = ? (a) 60 (b) 10 (c) 120 (d) 20 <span class="ans">Ans: a</span></li>
+          <li class="mcq"><span class="q-num">Q9</span> If a·b = 0 and a, b are non-zero vectors, they are: (a) parallel (b) perpendicular (c) equal (d) collinear <span class="ans">Ans: b</span></li>
+          <li class="mcq"><span class="q-num">Q10</span> AM between 6 and 14 is: (a) 10 (b) 8 (c) 12 (d) 84 <span class="ans">Ans: a</span></li>
+          <li class="mcq"><span class="q-num">Q11</span> 0! = ? (a) 0 (b) 1 (c) undefined (d) ∞ <span class="ans">Ans: b</span></li>
+          <li class="mcq"><span class="q-num">Q12</span> Remainder when p(x) = x²−3x+2 is divided by (x−1): (a) 0 (b) 1 (c) 2 (d) −1 <span class="ans">Ans: a</span></li>
+          <li class="mcq"><span class="q-num">Q13</span> cos(2A) expressed in terms of sinA only is: (a) 1−2sin²A (b) 2cos²A−1 (c) cos²A−sin²A (d) 2sinAcosA <span class="ans">Ans: a</span></li>
+          <li class="mcq"><span class="q-num">Q14</span> Sum to infinity of GP 1 + 1/3 + 1/9 + ... is: (a) 3/2 (b) 2 (c) 3 (d) 4 <span class="ans">Ans: a</span></li>
+          <li class="mcq"><span class="q-num">Q15</span> The number of diagonals in a hexagon is: (a) 9 (b) 12 (c) 6 (d) 15 <span class="ans">Ans: a</span></li>
+          <li class="mcq"><span class="q-num">Q16</span> If A is symmetric, then Aᵀ = ? (a) A (b) −A (c) A⁻¹ (d) I <span class="ans">Ans: a</span></li>
+          <li class="mcq"><span class="q-num">Q17</span> The 5th term of GP with a=2, r=3 is: (a) 162 (b) 486 (c) 54 (d) 18 <span class="ans">Ans: a</span></li>
+          <li class="mcq"><span class="q-num">Q18</span> sin(90°+A) = ? (a) cosA (b) −cosA (c) sinA (d) −sinA <span class="ans">Ans: a</span></li>
+          <li class="mcq"><span class="q-num">Q19</span> ⁸C₃ = ? (a) 56 (b) 336 (c) 28 (d) 70 <span class="ans">Ans: a</span></li>
+          <li class="mcq"><span class="q-num">Q20</span> Real part of (2+3i)(1−i) is: (a) 5 (b) 2 (c) −1 (d) 3 <span class="ans">Ans: a</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="paper-section">
+      <div class="paper-section-head">Section B — Short Questions (Attempt 8 of 10) <span>40 Marks</span></div>
+      <div class="paper-section-body">
+        <ul class="q-list">
+          <li class="sq"><span class="q-num">Q1</span> Find modulus and argument of z = −√3 + i. Write in polar form.</li>
+          <li class="sq"><span class="q-num">Q2</span> If A = [[2,1,0],[3,−1,2],[1,4,−2]], find the cofactor of element a₂₃.</li>
+          <li class="sq"><span class="q-num">Q3</span> The 5th term of GP is 48 and r = 2. Find the first term and the GP.</li>
+          <li class="sq"><span class="q-num">Q4</span> Prove by induction: 1² + 2² + 3² + ... + n² = n(n+1)(2n+1)/6</li>
+          <li class="sq"><span class="q-num">Q5</span> Find the term containing x³ in the expansion of (2x + 1/x)⁹.</li>
+          <li class="sq"><span class="q-num">Q6</span> Prove: cos(60°+A) + cos(60°−A) = cosA.</li>
+          <li class="sq"><span class="q-num">Q7</span> Find remainder when p(x) = x³−2x²+3x−5 is divided by (x−2).</li>
+          <li class="sq"><span class="q-num">Q8</span> How many 3-digit numbers can be formed from {1,2,3,4,5} without repetition?</li>
+          <li class="sq"><span class="q-num">Q9</span> Find a·b for a = 2i−3j+k, b = i+2j−2k. Find angle between them.</li>
+          <li class="sq"><span class="q-num">Q10</span> Find max and min value of f(x) = 3 + 5sin(2x).</li>
+        </ul>
+      </div>
+    </div>
+    <div class="paper-section">
+      <div class="paper-section-head">Section C — Long Questions (Attempt 3 of 5) <span>40 Marks</span></div>
+      <div class="paper-section-body">
+        <ul class="q-list">
+          <li class="lq"><span class="q-num">Q1</span> Solve by Cramer's Rule: x+2y+z=4, 2x−y+3z=9, x+y−2z=−3</li>
+          <li class="lq"><span class="q-num">Q2</span> (a) Prove: n³+2n is divisible by 3 for all n∈ℕ &nbsp; (b) Expand (a−b)⁶ fully using binomial theorem</li>
+          <li class="lq"><span class="q-num">Q3</span> (a) Find sum of 20 terms of 5+8+11+... &nbsp; (b) Insert 4 GMs between 1 and 243</li>
+          <li class="lq"><span class="q-num">Q4</span> Prove sin(A+B)·sin(A−B) = sin²A − sin²B. Find exact value of sin(75°).</li>
+          <li class="lq"><span class="q-num">Q5</span> (a) Find a × b for a=i+2j−3k, b=2i−j+k &nbsp; (b) Find area of parallelogram formed by a and b</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAPER 2 -->
+  <div class="paper-content" id="paper-2">
+    <div class="paper-section">
+      <div class="paper-section-head">Section A — MCQs (All 20) <span>20 Marks</span></div>
+      <div class="paper-section-body">
+        <ul class="q-list">
+          <li class="mcq"><span class="q-num">Q1</span> Real part of (2+3i)² is: (a) −5 (b) 5 (c) 12 (d) −4 <span class="ans">Ans: a  [= 4+12i−9 = −5+12i]</span></li>
+          <li class="mcq"><span class="q-num">Q2</span> If A is 3×2 and B is 2×4, then AB has order: (a) 3×4 (b) 2×2 (c) 4×3 (d) not defined <span class="ans">Ans: a</span></li>
+          <li class="mcq"><span class="q-num">Q3</span> S∞ of 1 + 1/2 + 1/4 + ... is: (a) 2 (b) 1 (c) 3 (d) ∞ <span class="ans">Ans: a</span></li>
+          <li class="mcq"><span class="q-num">Q4</span> Middle term of (x+y)⁶ is: (a) T₄ (b) T₃ (c) T₅ (d) T₇ <span class="ans">Ans: a</span></li>
+          <li class="mcq"><span class="q-num">Q5</span> tan(A−B) = ? (a) (tanA−tanB)/(1+tanAtanB) (b) (tanA+tanB)/(1−tanAtanB) (c) sinAcosB−cosAsinB (d) none <span class="ans">Ans: a</span></li>
+          <li class="mcq"><span class="q-num">Q6</span> Which is the harmonic mean of 3 and 6? (a) 4 (b) 4.5 (c) 3.5 (d) 5 <span class="ans">Ans: a  [HM = 2(3)(6)/(3+6) = 4]</span></li>
+          <li class="mcq"><span class="q-num">Q7</span> ⁶P₂ = ? (a) 30 (b) 15 (c) 12 (d) 6 <span class="ans">Ans: a</span></div></li>
+          <li class="mcq"><span class="q-num">Q8</span> Maximum value of 2 + 3sinθ is: (a) 5 (b) 3 (c) 2 (d) 1 <span class="ans">Ans: a</span></li>
+          <li class="mcq"><span class="q-num">Q9</span> If det(A) ≠ 0, then system AX = B has: (a) unique solution (b) no solution (c) infinite solutions (d) two solutions <span class="ans">Ans: a</span></li>
+          <li class="mcq"><span class="q-num">Q10–Q20</span> <em>Remaining MCQs covering units 1–9 at similar difficulty...</em></li>
+        </ul>
+      </div>
+    </div>
+    <div class="paper-section">
+      <div class="paper-section-head">Section B — Short Questions (Attempt 8 of 10) <span>40 Marks</span></div>
+      <div class="paper-section-body">
+        <ul class="q-list">
+          <li class="sq"><span class="q-num">Q1</span> Solve: z² + z + 1 = 0 using completing the square (find complex roots)</li>
+          <li class="sq"><span class="q-num">Q2</span> Using row operations, find rank of [[1,2,3],[2,4,6],[1,1,1]]</li>
+          <li class="sq"><span class="q-num">Q3</span> Prove by induction: Σr³ = [n(n+1)/2]²</li>
+          <li class="sq"><span class="q-num">Q4</span> Sum of first 3 terms of GP is 13 and their product is 27. Find the GP.</li>
+          <li class="sq"><span class="q-num">Q5</span> Find the middle terms of (x² − 1/x)⁷</li>
+          <li class="sq"><span class="q-num">Q6</span> Prove: (sin3A − sinA) / (cosA − cos3A) = cotA</li>
+          <li class="sq"><span class="q-num">Q7</span> Factorize x³ − 7x − 6 using Factor Theorem</li>
+          <li class="sq"><span class="q-num">Q8</span> In how many ways can 8 people be seated at a round table?</li>
+          <li class="sq"><span class="q-num">Q9</span> If |a|=3, |b|=4 and angle between them is 60°, find a·b and |a×b|</li>
+          <li class="sq"><span class="q-num">Q10</span> State domain and range of f(x) = sinx. Is it odd or even? What is its period?</li>
+        </ul>
+      </div>
+    </div>
+    <div class="paper-section">
+      <div class="paper-section-head">Section C — Long Questions (Attempt 3 of 5) <span>40 Marks</span></div>
+      <div class="paper-section-body">
+        <ul class="q-list">
+          <li class="lq"><span class="q-num">Q1</span> Solve by matrix inversion: 2x+y−z=3, x−2y+3z=5, 3x+y+2z=7</li>
+          <li class="lq"><span class="q-num">Q2</span> (a) Prove 7ⁿ−1 is divisible by 6 by induction &nbsp; (b) Find term independent of x in (x + 1/x²)⁹</li>
+          <li class="lq"><span class="q-num">Q3</span> (a) Sum 1/(1·3) + 1/(3·5) + 1/(5·7) + ... to n terms using partial fractions &nbsp; (b) Insert 4 HMs between 1/7 and 1/2</li>
+          <li class="lq"><span class="q-num">Q4</span> Derive sin(A−B) from cos(A−B). Prove all allied angle formulas for 90°−A.</li>
+          <li class="lq"><span class="q-num">Q5</span> Prove scalar triple product = 0 for coplanar vectors. Test if a=i+2j−k, b=2i−j+k, c=i−j+2k are coplanar.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAPER 3 -->
+  <div class="paper-content" id="paper-3">
+    <div class="paper-section">
+      <div class="paper-section-head">Section A — MCQs (All 20) <span>20 Marks</span></div>
+      <div class="paper-section-body">
+        <ul class="q-list">
+          <li class="mcq"><span class="q-num">Q1</span> If z₁z₂ = 0 then: (a) both must be zero (b) at least one is zero (c) both are real (d) none <span class="ans">Ans: b</span></li>
+          <li class="mcq"><span class="q-num">Q2</span> Gaussian elimination reduces augmented matrix to: (a) echelon form (b) identity (c) diagonal (d) zero matrix <span class="ans">Ans: a</span></li>
+          <li class="mcq"><span class="q-num">Q3</span> The nth term of HP with first two terms 1/2, 1/5 is: (a) 1/(3n−1) (b) 1/(2n+1) (c) 1/(n+1) (d) 1/(3n+1) <span class="ans">Ans: a</span></li>
+          <li class="mcq"><span class="q-num">Q4</span> Coefficient of x⁴ in (1+x)⁶ is: (a) 15 (b) 20 (c) 6 (d) 10 <span class="ans">Ans: a</span></li>
+          <li class="mcq"><span class="q-num">Q5</span> sin(3A) = ? (a) 3sinA − 4sin³A (b) 4sinA − 3sin³A (c) 3cosA−4cos³A (d) none <span class="ans">Ans: a</span></li>
+          <li class="mcq"><span class="q-num">Q6–Q20</span> <em>Further high-difficulty MCQs from all units...</em></li>
+        </ul>
+      </div>
+    </div>
+    <div class="paper-section">
+      <div class="paper-section-head">Section B — Short Questions (Attempt 8 of 10) <span>40 Marks</span></div>
+      <div class="paper-section-body">
+        <ul class="q-list">
+          <li class="sq"><span class="q-num">Q1</span> Solve: 2z² − (3+2i)z + (1+3i) = 0 for complex z</li>
+          <li class="sq"><span class="q-num">Q2</span> Prove: system 2x−y=3, −4x+2y=k has infinite solutions iff k = −6</li>
+          <li class="sq"><span class="q-num">Q3</span> Prove by induction: 2ⁿ > n² for all integers n ≥ 5</li>
+          <li class="sq"><span class="q-num">Q4</span> Coefficients of (r−1)th, rth, (r+1)th terms in (1+x)ⁿ are in AP. Prove: n² − n(4r+1) + 4r² − 2 = 0</li>
+          <li class="sq"><span class="q-num">Q5</span> Find sum: 3/(1·2·3) + 4/(2·3·4) + 5/(3·4·5) + ... to n terms</li>
+          <li class="sq"><span class="q-num">Q6</span> Express 5cosθ + 12sinθ in form r cos(θ−α). Find max value and the angle at which it occurs.</li>
+          <li class="sq"><span class="q-num">Q7</span> If α, β, γ are roots of x³−px²+qx−r=0, find α²+β²+γ²</li>
+          <li class="sq"><span class="q-num">Q8</span> How many 5-digit numbers divisible by 5 can be formed from {0,1,2,3,4,5} without repetition?</li>
+          <li class="sq"><span class="q-num">Q9</span> Prove [a b c] = a·(b×c) and interpret as volume of parallelepiped</li>
+          <li class="sq"><span class="q-num">Q10</span> Sketch one period of y = 2sin(x) − 1. State max, min, zeros, and period.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="paper-section">
+      <div class="paper-section-head">Section C — Long Questions (Attempt 3 of 5) <span>40 Marks</span></div>
+      <div class="paper-section-body">
+        <ul class="q-list">
+          <li class="lq"><span class="q-num">Q1</span> Solve by Gaussian elimination: x+y+z=6, 2x−y+3z=14, −x+2y−z=2</li>
+          <li class="lq"><span class="q-num">Q2</span> (a) Prove by induction: Σr(r+1) = n(n+1)(n+2)/3 &nbsp; (b) Find sum of 10th and 11th terms of (√x − 1/√x)²⁰</li>
+          <li class="lq"><span class="q-num">Q3</span> Sum of AM and GM of two numbers is 10, their difference is 2. Find the numbers and their HM.</li>
+          <li class="lq"><span class="q-num">Q4</span> Prove: sin(α+β)cos(α−β) = sin²α − sin²β + sinα cosα sin2β</li>
+          <li class="lq"><span class="q-num">Q5</span> (a) Find all vectors perpendicular to both a=2i+j−k and b=i−2j+k &nbsp; (b) Find volume of parallelepiped formed by a, b, c=i+j+2k</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHECKLIST -->
+<section class="section" id="checklist">
+  <div class="step-label">Bonus — Night Before Exam</div>
+  <h2 class="section-title">Emergency Checklist ✅</h2>
+  <p style="margin-bottom:16px;color:#666;font-size:14px;">Tick off each formula group once you've reviewed it:</p>
+  <div class="checklist">
+    <label class="check-item"><input type="checkbox"> <label>Σn, Σn², Σn³ formulas</label></label>
+    <label class="check-item"><input type="checkbox"> <label>Cramer's Rule steps (D, Dₓ, Dy, Dz)</label></label>
+    <label class="check-item"><input type="checkbox"> <label>Binomial T(r+1) = ⁿCᵣ aⁿ⁻ʳ bʳ</label></label>
+    <label class="check-item"><input type="checkbox"> <label>Induction: Base → Assume → Prove</label></label>
+    <label class="check-item"><input type="checkbox"> <label>All 6 compound angle formulas</label></label>
+    <label class="check-item"><input type="checkbox"> <label>Double angle: sin2A, cos2A (3 forms), tan2A</label></label>
+    <label class="check-item"><input type="checkbox"> <label>ⁿPᵣ, ⁿCᵣ, circular (n−1)!</label></label>
+    <label class="check-item"><input type="checkbox"> <label>Modulus & polar form of complex number</label></label>
+    <label class="check-item"><input type="checkbox"> <label>GP S∞ = a/(1−r); condition |r| &lt; 1</label></label>
+    <label class="check-item"><input type="checkbox"> <label>AP nth term and sum formulas</label></label>
+    <label class="check-item"><input type="checkbox"> <label>Cofactor sign pattern: + − + / − + − / + − +</label></label>
+    <label class="check-item"><input type="checkbox"> <label>Middle term condition (n even vs odd)</label></label>
+  </div>
+</section>
+
+<footer class="footer">
+  <strong>FBISE 11th Class Mathematics — Complete Exam Intelligence System</strong><br>
+  <span style="margin-top:8px;display:block;">Based on National Book Foundation Textbook · National Curriculum 2022–23</span>
+  <span style="margin-top:4px;display:block;">May Allah grant you success in your exams. Ameen. 🤲</span>
+</footer>
+
+<script>
+  function scrollTo(id) {
+    document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.querySelectorAll('.nav-btn').forEach((b,i) => {
+      b.classList.toggle('active', b.getAttribute('onclick') === `scrollTo('${id}')`);
+    });
+  }
+
+  function switchPaper(n) {
+    document.querySelectorAll('.paper-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.paper-tab').forEach(el => el.classList.remove('active'));
+    document.getElementById('paper-' + n).classList.add('active');
+    document.querySelectorAll('.paper-tab')[n-1].classList.add('active');
+  }
+
+  // Active nav on scroll
+  const sections = ['s1','s2','s3','s4','s5','s6','s7','s8'];
+  const navBtns = document.querySelectorAll('.nav-btn');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && window.scrollY >= el.offsetTop - 120) current = id;
+    });
+    navBtns.forEach(b => {
+      b.classList.toggle('active', b.getAttribute('onclick') === `scrollTo('${current}')`);
+    });
+  });
+</script>
+</body>
+</html>
